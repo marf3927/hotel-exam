@@ -1,0 +1,29 @@
+@hotelId =100
+@roomId =4
+
+### 객실 예약
+POST http://localhost:8080/v1/hotel-api/reservations/{{roomId}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEwMCwiaXNzIjoibmhuLWFjYWRlbXktbWFyY28iLCJpYXQiOjE3MTA1MTIyMDgsImV4cCI6MTc5NjkxMjIwOH0.-sx5W47k7xEI24iTPSSFUzxOH8LNLzboDjmJlqykPkE
+Content-Type: application/json
+
+{
+  "checkInDate": "2024-05-15",
+  "checkOutDate": "2024-05-16",
+  "pax": 2
+}
+
+### 객실 예약 권한 없음(403 에러)
+# Body : {"errorMessage": "권한이 없습니다. "}
+# Jwt 토큰과 함께 전달(인증 했더라도)했더라도 객실 예약할 권한이 없기 때문에 403 에러 반환
+POST http://localhost:8080/v1/hotel-api/reservations/{{roomId}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjk5OTksImlzcyI6Im5obi1hY2FkZW15LW1hcmNvIiwiaWF0IjoxNzEwNTA4MDQwLCJleHAiOjE4ODMzMDgwNDB9.1W0KJj7mBuYhNPqEwfJzSvQD4JsNY-75qDvvlPqWiwE
+Content-Type: application/json
+
+{
+  "checkInDate": "2024-05-15",
+  "checkOutDate": "2024-05-16",
+  "pax": 2
+}
+
