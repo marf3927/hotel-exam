@@ -39,5 +39,4 @@ public class RoomController {
 		@Valid @RequestBody RoomRequest roomRequest) {
 		return roomService.createRoom(hotelId, roomRequest);
 	}
-
 }

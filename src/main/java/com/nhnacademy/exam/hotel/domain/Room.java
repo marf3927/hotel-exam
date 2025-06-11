@@ -8,8 +8,11 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.nhnacademy.exam.hotel.common.ViewTypeConverter;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -60,6 +63,7 @@ public class Room {
 	private boolean bathtubFlag;
 
 	@Enumerated(EnumType.ORDINAL)
+	@Convert(converter = ViewTypeConverter.class)
 	@Column(name = "view_type", nullable = false)
 	private ViewType viewType;
 

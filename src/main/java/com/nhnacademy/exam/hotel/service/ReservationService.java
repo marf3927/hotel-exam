@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nhnacademy.exam.hotel.domain.DailyRoomProduct;
 import com.nhnacademy.exam.hotel.domain.Reservation;
@@ -18,7 +19,6 @@ import com.nhnacademy.exam.hotel.repository.DailyRoomProductsRepository;
 import com.nhnacademy.exam.hotel.repository.ReservationRepository;
 import com.nhnacademy.exam.hotel.repository.RoomRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,7 +28,7 @@ public class ReservationService {
 	private final RoomRepository roomRepository;
 	private final DailyRoomProductsRepository dailyRoomProductsRepository;
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public ReservationResponse createReservation(Long userId, Long roomId, CreateReservationRequest request) {
 		LocalDate checkInDate = request.getCheckInDate();
 		LocalDate checkOutDate = request.getCheckOutDate();
@@ -37,7 +37,7 @@ public class ReservationService {
 			.countOverlappingReservationsForUserQueryDsl(userId, checkInDate, checkOutDate);
 
 		if (existingReservations >= 3) {
-			throw new ApplicationException(HttpStatus.BAD_REQUEST,
+			throw new ApplicationException(HttpStatus.CONFLICT,
 				"한 사용자는 하루에 최대 3개의 객실만 예약할 수 있습니다.");
 		}
 
@@ -53,7 +53,7 @@ public class ReservationService {
 		List<DailyRoomProduct> products = dailyRoomProductsRepository
 			.findByRoom_roomIdAndStayDateBetween(roomId, checkInDate, stayEndDate);
 
-		long requiredDays = checkOutDate.toEpochDay() - stayEndDate.toEpochDay();
+		long requiredDays = checkOutDate.toEpochDay() - checkInDate.toEpochDay();
 		if (products.size() != requiredDays) {
 			throw new IllegalStateException("요청하신 날짜에 해당 객실을 이용할 수 없습니다.");
 		}

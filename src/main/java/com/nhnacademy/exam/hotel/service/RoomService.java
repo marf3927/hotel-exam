@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.nhnacademy.exam.hotel.domain.Hotel;
 import com.nhnacademy.exam.hotel.domain.Room;
-import com.nhnacademy.exam.hotel.domain.ViewType;
 import com.nhnacademy.exam.hotel.dto.CreateRoomResponse;
 import com.nhnacademy.exam.hotel.dto.RoomRequest;
 import com.nhnacademy.exam.hotel.dto.RoomResponse;
@@ -50,7 +49,7 @@ public class RoomService {
 			.capacity(roomRequest.getCapacity())
 			.floor(roomRequest.getFloor())
 			.bathtubFlag(roomRequest.isHasBathtub())
-			.viewType(ViewType.fromParameter(roomRequest.getViewType()))
+			.viewType(roomRequest.getViewType())
 			.price(roomRequest.getPrice())
 			.peakSeasonPrice(roomRequest.getPeakSeasonPrice())
 			.build();

@@ -22,7 +22,26 @@ CREATE TABLE `rooms`
     `updated_at`        DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`room_id`),
     INDEX `idx_rooms_hotel_id` (`hotel_id`),
-    CONSTRAINT `fk_rooms_hotel_id` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`)
+    CONSTRAINT `fk_rooms_hotel_id` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`),
+    CONSTRAINT `chk_price_positive` CHECK (`price` >= 0)
+);
+
+CREATE TABLE `reviews`
+(
+    `review_id`      BIGINT       NOT NULL AUTO_INCREMENT,
+    `reservation_id` BIGINT       NOT NULL,
+    `user_id`        BIGINT       NOT NULL,
+    `rating`         TINYINT      NOT NULL DEFAULT 5,
+    `title`          VARCHAR(100) NOT NULL,
+    `content`        TEXT         NOT NULL,
+    `is_visible`     BOOLEAN      NOT NULL DEFAULT TRUE,
+    `created_at`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`review_id`),
+    INDEX `idx_reviews_user_id` (`user_id`),
+    CONSTRAINT `fk_reviews_reservation_id` FOREIGN KEY `reservations` (`reservation_id`) REFERENCES `reservations` (`reservation_id`),
+    CONSTRAINT `uk_reviews_reservation_id` UNIQUE (`reservation_id`),
+    CONSTRAINT `chk_rating_range` CHECK (`rating` BETWEEN 1 AND 5)
 );
 
 CREATE TABLE `reservations`
@@ -40,7 +59,9 @@ CREATE TABLE `reservations`
     PRIMARY KEY (`reservation_id`),
     INDEX `idx_reservations_user_id` (`user_id`),
     INDEX `idx_reservations_room_id` (`room_id`),
-    CONSTRAINT `fk_reservations_room_id` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`)
+    CONSTRAINT `fk_reservations_room_id` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`),
+    CONSTRAINT `chk_reservation_dates` CHECK (`check_out_date` > `check_in_date`),
+    CONSTRAINT `chk_pax_positive` CHECK (`pax` > 0)
 );
 
 CREATE TABLE `daily_room_products`
@@ -68,22 +89,6 @@ CREATE TABLE `images`
     PRIMARY KEY (`image_id`)
 );
 
-CREATE TABLE `reviews`
-(
-    `review_id`      BIGINT       NOT NULL AUTO_INCREMENT,
-    `reservation_id` BIGINT       NOT NULL,
-    `user_id`        BIGINT       NOT NULL,
-    `rating`         TINYINT      NOT NULL DEFAULT 5,
-    `title`          VARCHAR(100) NOT NULL,
-    `content`        TEXT         NOT NULL,
-    `is_visible`     BOOLEAN      NOT NULL DEFAULT TRUE,
-    `created_at`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`review_id`),
-    INDEX `idx_reviews_user_id` (`user_id`),
-    INDEX `idx_reviews_reservation_id` (`reservation_id`),
-    CONSTRAINT `fk_reviews_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`reservation_id`)
-);
 
 CREATE TABLE `review_images`
 (

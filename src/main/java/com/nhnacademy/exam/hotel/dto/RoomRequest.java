@@ -2,6 +2,8 @@ package com.nhnacademy.exam.hotel.dto;
 
 import java.math.BigDecimal;
 
+import com.nhnacademy.exam.hotel.domain.ViewType;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +29,7 @@ public class RoomRequest {
 	private boolean hasBathtub;
 
 	@NotNull
-	private String viewType;
+	private ViewType viewType;
 
 	@NotNull
 	@DecimalMin(value = "0.0", inclusive = false)
