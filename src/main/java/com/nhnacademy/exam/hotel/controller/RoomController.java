@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nhnacademy.exam.hotel.dto.CreateRoomResponse;
 import com.nhnacademy.exam.hotel.dto.RoomRequest;
 import com.nhnacademy.exam.hotel.dto.RoomResponse;
-import com.nhnacademy.exam.hotel.service.ReservationService;
 import com.nhnacademy.exam.hotel.service.RoomService;
 
 import jakarta.validation.Valid;
@@ -25,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoomController {
 	private final RoomService roomService;
-	private final ReservationService reservationService;
 
 	@GetMapping("")
 	public List<RoomResponse> getRoomsByHotelId(@PathVariable Long hotelId) {
